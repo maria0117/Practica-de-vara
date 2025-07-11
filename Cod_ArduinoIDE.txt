@@ -1,0 +1,97 @@
+#include <FastLED.h>
+#include "BluetoothSerial.h"
+
+#define DATA_PIN 13        // Banda LED (NeoPixel)
+#define NORMAL_LED 12      // Bec normal
+#define NUM_LEDS 24
+
+CRGB leds[NUM_LEDS];
+BluetoothSerial SerialBT;
+
+void setup() {
+  Serial.begin(115200);
+  if (!SerialBT.begin("ESP32_LED")) {
+    Serial.println("Bluetooth failed");
+  } else {
+    Serial.println("Bluetooth started, pair it in phone settings.");
+  }
+
+  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+  FastLED.clear();
+  FastLED.show();
+
+  pinMode(NORMAL_LED, OUTPUT);      
+  digitalWrite(NORMAL_LED, LOW);    
+}
+
+String receivedText = "";
+CRGB currentColor = CRGB(255, 255, 255);
+float currentIntensity = 1.0;
+
+void loop() {
+  while (SerialBT.available()) {
+    char c = SerialBT.read();
+    if (c == '\n') {
+      Serial.println("Received: " + receivedText);
+
+      // Control banda LED (pin 13)
+      if (receivedText.startsWith("#")) {
+        char errorCode = receivedText[1];
+        char ledIndex = receivedText[2];
+        if(errorCode == '0') //a mers totul bine, schimbam la bec
+        {
+          if(ledIndex == '0') //baie
+          {
+            String hexCode = receivedText.substring(3);
+            long number = strtol(hexCode.c_str(), NULL, 16);
+            currentColor = CRGB((number >> 16) & 0xFF, (number >> 8) & 0xFF, number & 0xFF);
+            ringSetColor(currentColor, currentIntensity);
+          }else if(ledIndex == '1') //bucatarie
+          {
+            String hexCode = receivedText.substring(3);
+            if(hexCode == "FFFFFF")
+              digitalWrite(NORMAL_LED,HIGH);
+            else if(hexCode == "000000")
+              digitalWrite(NORMAL_LED,LOW);
+          }
+        }else if(errorCode == '4') // schimbam intensitate
+        {
+          if(ledIndex == '3')
+          {
+            String percent = receivedText.substring(6);
+            float factor = atof(percent.c_str())/100.0;
+
+            CRGB adjustedColor = CRGB(
+              (uint8_t)(currentColor.r * factor),
+              (uint8_t)(currentColor.g * factor),
+              (uint8_t)(currentColor.b * factor)
+            );
+
+            currentIntensity = factor; 
+            fill_solid(leds, NUM_LEDS, adjustedColor);
+            FastLED.show();
+          }
+        }
+      }
+
+      else {
+        Serial.println("Format invalid.");
+      }
+
+      receivedText = "";
+    } else {
+      receivedText += c;
+    }
+  }
+}
+
+void ringSetColor(CRGB color, float intensity)
+{
+        CRGB adjustedColor = CRGB(
+         (uint8_t)(color.r * intensity),
+         (uint8_t)(color.g * intensity),
+         (uint8_t)(color.b * intensity)
+        );
+        fill_solid(leds, NUM_LEDS, adjustedColor);
+        FastLED.show();
+}
