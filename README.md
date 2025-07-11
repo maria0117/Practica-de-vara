@@ -16,5 +16,7 @@ Obiectivele principale ale proiectului sunt:
 
 # Practica de vara 2025
 Facultatea de Automatică, Calculatoare și Electronică – Universitatea din Craiova
+
 Student: Cioponea Ionut-Sebastian
+
 Student: Braitor Ana-Maria
