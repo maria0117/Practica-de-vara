@@ -14,6 +14,6 @@ Obiectivele principale ale proiectului sunt:
 
 -Testarea aplicației și sistemului integrat în diferite scenarii de utilizare.
 
-Practica de vara 2025
+# Practica de vara 2025
 Facultatea de Automatică, Calculatoare și Electronică – Universitatea din Craiova
 
