@@ -1,0 +1,21 @@
+name,hex,r,g,b
+ROȘU,#FF0000,255,0,0
+Verde,#00FF00,0,255,0
+Albastru,#0000FF,0,0,255
+Galben,#FFFF00,255,255,0
+Cian,#00FFFF,0,255,255
+Magenta,#FF00FF,255,0,255
+Castaniu închis,#800000,128,0,0
+Măsliniu,#808000,128,128,0
+Verde închis,#008000,0,128,0
+Mov,#800080,128,0,128
+Albastru-verzui,#008080,0,128,128
+Bleumarin,#000080,0,0,128
+Alb,#FFFFFF,255,255,255
+Argintiu,#C0C0C0,192,192,192
+Gri,#808080,128,128,128
+Negru,#000000,0,0,0
+Portocaliu,#FFA500,255,165,0
+Maro,#A52A2A,165,42,42
+Crem,#F0E68C,240,230,140
+Lavandă,#E6E6FA,230,230,250
